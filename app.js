@@ -37,6 +37,11 @@ app.get('/', (req, res, next) => {
     return res.redirect('/users');
 });
 
+// error handler
+app.use((err, req, res, next) => {
+    return res.json(err);
+});
+
 app.listen(PORT, () => {
    console.log(`server running at ${PORT}`); 
 });
