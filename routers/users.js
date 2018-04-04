@@ -6,7 +6,7 @@ const {
 const router = express.Router();
 const { Validator } = require('jsonschema');
 const v = new Validator();
-const { userNewSchema } = require('../schemas');
+const { userNewSchema, userUpdateSchema } = require('../schemas');
 
 router
     .route('/')
@@ -54,12 +54,16 @@ router
             });
     })
     .patch((req, res, next) => {
-        let valid = v.validate(req.body, userNewSchema)
-        console.log(valid.errors)
-        return User.findOneAndUpdate({ username: `${req.params.username}` }, req.body)
-            .then(() => {
-                return res.redirect(`/users/${req.params.username}`);
-            })
+        let reqBody = {...req.body};
+        delete reqBody.username;
+        let valid = v.validate(reqBody, userUpdateSchema);
+        console.log(valid)
+        if(valid.errors.length === 0) {
+            return User.findOneAndUpdate({ username: `${req.params.username}` }, reqBody)
+                .then(() => {
+                    return res.redirect(`/users/${req.params.username}`);
+                })
+        }
     })
     .delete((req, res, next) => {
         return User.findOneAndRemove({ username: `${req.params.username}` })

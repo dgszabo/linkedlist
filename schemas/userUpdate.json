@@ -3,14 +3,6 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
-      "username": {
-        "$id": "/properties/username",
-        "type": "string",
-        "title": "The Username Schema ",
-        "readOnly": true,
-        "minLength": 1,
-        "maxLength": 55
-      },
       "emailAddress": {
         "$id": "/properties/emailAddress",
         "type": "string",
@@ -52,7 +44,6 @@
       }
     },
     "required": [
-      "username",
       "emailAddress"
     ]
 }
