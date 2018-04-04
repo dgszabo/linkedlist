@@ -4,6 +4,9 @@ const {
     Company
 } = require('../models');
 const router = express.Router();
+const { Validator } = require('jsonschema');
+const v = new Validator();
+const { userNewSchema } = require('../schemas');
 
 router
     .route('/')
@@ -18,7 +21,8 @@ router
         });
     })
     .post((req, res, next) => {
-
+        console.log(v.validate(req.body, userNewSchema).instance);
+        console.log("\nEnd of console.log\n")
         // return User.create(req.body).then(() => {
         //     return res.status(201).redirect('/users');
         // });

@@ -1,0 +1,57 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "username": {
+      "$id": "/properties/username",
+      "type": "string",
+      "title": "The Username Schema ",
+      "minLength": 1,
+      "maxLength": 55
+    },
+    "emailAddress": {
+      "$id": "/properties/emailAddress",
+      "type": "string",
+      "title": "The Emailaddress Schema ",
+      "minLength": 1,
+      "maxLength": 55,
+      "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+    },
+    "firstName": {
+      "$id": "/properties/firstName",
+      "type": "string",
+      "title": "The Firstname Schema ",
+      "minLength": 1,
+      "maxLength": 55
+    },
+    "lastName": {
+      "$id": "/properties/lastName",
+      "type": "string",
+      "title": "The Lastname Schema ",
+      "minLength": 1,
+      "maxLength": 55
+    },
+    "userId": {
+      "$id": "/properties/userId",
+      "type": "string",
+      "title": "The Userid Schema ",
+      "minLength": 1,
+      "maxLength": 55
+    },
+    "createdAt": {
+      "$id": "/properties/createdAt",
+      "type": "string",
+      "title": "The Createdat Schema "
+    },
+    "updatedAt": {
+      "$id": "/properties/updatedAt",
+      "type": "string",
+      "title": "The Updatedat Schema "
+    }
+  },
+  "required": [
+    "username",
+    "emailAddress"
+  ]
+}
