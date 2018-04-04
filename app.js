@@ -39,9 +39,6 @@ app.get('/', (req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    // if(err === 'no_user') {
-    //     return res.status(404).json('The requested user does not exist')
-    // }
     return res.json(err);
 });
 
