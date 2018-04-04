@@ -30,34 +30,41 @@ router
         return User.createUser(new User(req.body))
             .then(() => {
                 return res.status(201).redirect('/users');
+            })
+            .catch(err => {
+                return next(err);
             });
     });
 
-router.get('/new', (req, res, next) => {
-    return res.render('users/new')
-});
+// router.get('/new', (req, res, next) => {
+//     return res.render('users/new')
+// });
 
 router
-    .route('/:userId')
+    .route('/:username')
     .get((req, res, next) => {
         return User.findOne({
-                _id: `${req.params.userId}`
+                username: `${req.params.username}`,
             })
             // add populate when applications and messages added later
             .then(user => {
-                return res.json({
-                    user
-                })
+                if(user === null) {
+                    return next("no_user");
+                }
+                return res.json({ user })
             })
+            .catch(err => {
+                return next(err);
+            });
     })
     .patch((req, res, next) => {
-        return User.findByIdAndUpdate(req.params.userId, req.body)
+        return User.findOneAndUpdate({ username: `${req.params.username}` }, req.body)
             .then(() => {
-                return res.redirect(`/users/${req.params.userId}`);
+                return res.redirect(`/users/${req.params.username}`);
             })
     })
     .delete((req, res, next) => {
-        return User.findByIdAndRemove(req.params.userId)
+        return User.findOneAndRemove({ username: `${req.params.username}` })
             .then(() => {
                 return res.redirect('/users');
             })
