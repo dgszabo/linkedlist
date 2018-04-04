@@ -1,0 +1,28 @@
+{
+  "name": "linkedlist",
+  "version": "1.0.0",
+  "description": "This is a repo for the LinkedList project at Rithm School.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dgszabo/linkedlist.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dgszabo/linkedlist/issues"
+  },
+  "homepage": "https://github.com/dgszabo/linkedlist#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "method-override": "^2.3.10",
+    "mongoose": "^5.0.12",
+    "morgan": "^1.9.0",
+    "pug": "^2.0.3",
+    "uuid": "^3.2.1"
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+html(lang="en")
+head
+    meta(charset="UTF-8")
+    link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm",crossorigin="anonymous")
+    script(defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js")
+    script(src="https://code.jquery.com/jquery-3.3.1.min.js",integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=",crossorigin="anonymous")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q",crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js",integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl",crossorigin="anonymous")
+    link(rel="stylesheet", href="/css/styles.css")
+    
+    block title
+body
+    nav(class="navbar sticky-top navbar-expand-lg navbar-light bg-light mb-2")
+        a(class="navbar-brand", href="#") linkedList
+        button(class="navbar-toggler", type="button", data-toggle="collapse", data-target="#navbarSupportedContent", aria-controls="navbarSupportedContent", aria-expanded="false", aria-label="Toggle navigation")
+            span(class="navbar-toggler-icon")
+
+        //- div(class="collapse navbar-collapse", id="navbarSupportedContent")
+        //-     ul(class="navbar-nav mr-auto")
+        //-         li(class="nav-item")
+        //-             a(class="nav-link", href="/items") item list
+
+        //-         li(class="nav-item")
+        //-             a(class="nav-link", href="/items/new") add new item
+
+        //-         li(class="nav-item")
+        //-             a(class="nav-link", href="/users") user list
+            
+        //-         li(class="nav-item")
+        //-             a(class="nav-link", href="/users/new") add new user
+
+            form(class="form-inline my-2 my-lg-0" action="/items/search" method="GET")
+                input(class="form-control mr-sm-2", type="search", name="search", placeholder="Search",aria-label="Search")
+                button(class="btn btn-outline-success my-2 my-sm-0", type="submit")
+                    i(class="fas fa-search")
+    
+    div(class="container")
+        block content
