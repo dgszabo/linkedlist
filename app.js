@@ -37,6 +37,14 @@ app.get('/', (req, res, next) => {
     return res.redirect('/users');
 });
 
+// error handler
+app.use((err, req, res, next) => {
+    // if(err === 'no_user') {
+    //     return res.status(404).json('The requested user does not exist')
+    // }
+    return res.json(err);
+});
+
 app.listen(PORT, () => {
    console.log(`server running at ${PORT}`); 
 });

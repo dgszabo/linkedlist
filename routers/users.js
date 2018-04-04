@@ -26,6 +26,9 @@ router
         return User.createUser(new User(req.body))
             .then(() => {
                 return res.status(201).redirect('/users');
+            })
+            .catch(err => {
+                return next(err);
             });
     });
 
@@ -41,10 +44,14 @@ router
             })
             // add populate when applications and messages added later
             .then(user => {
-                return res.json({
-                    user
-                })
+                if(user === null) {
+                    return next("no_user");
+                }
+                return res.json({ user })
             })
+            .catch(err => {
+                return next(err);
+            });
     })
     .patch((req, res, next) => {
         return User.findOneAndUpdate({ username: `${req.params.username}` }, req.body)
