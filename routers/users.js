@@ -12,28 +12,24 @@ router
     .route('/')
     .get((req, res, next) => {
         return User.find().then(users => {
-            // return res.render('users/index', {
-            //     users
-            // });
             return res.json({
                 users
             });
         });
     })
     .post((req, res, next) => {
-        console.log(v.validate(req.body, userNewSchema).instance);
-        console.log("\nEnd of console.log\n")
-        // return User.create(req.body).then(() => {
-        //     return res.status(201).redirect('/users');
-        // });
-        // console.log("Here is res.body " + res.body);
-        return User.createUser(new User(req.body))
-            .then(() => {
-                return res.status(201).redirect('/users');
+        let valid = v.validate(req.body, userNewSchema);
+        if(valid.errors.length === 0) {
+            return User.createUser(new User(req.body))
+                .then(() => {
+                    return res.status(201).redirect('/users');
+                })
+                .catch(err => {
+                    return next(err);
             })
-            .catch(err => {
-                return next(err);
-            });
+        } else {
+            return next(valid.errors)
+        }
     });
 
 // router.get('/new', (req, res, next) => {
@@ -58,6 +54,8 @@ router
             });
     })
     .patch((req, res, next) => {
+        let valid = v.validate(req.body, userNewSchema)
+        console.log(valid.errors)
         return User.findOneAndUpdate({ username: `${req.params.username}` }, req.body)
             .then(() => {
                 return res.redirect(`/users/${req.params.username}`);

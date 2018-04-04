@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
+// var immutablePlugin = require("mongoose-immutable");
 
 const userSchema = new mongoose.Schema({
     userId: {
@@ -10,6 +11,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        // immutable: true,
     },
     emailAddress: {
         type: String,
@@ -18,9 +20,13 @@ const userSchema = new mongoose.Schema({
     },
     firstName: String,
     lastName: String,
-}, {
+    },
+    {
     timestamps: true
-}, )
+    },
+)
+
+// userSchema.plugin(immutablePlugin);
 
 userSchema.statics = {
 
