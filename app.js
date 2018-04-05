@@ -8,11 +8,14 @@ const mongoose = require('mongoose');
 // globals
 const app = express();
 const PORT = 3007;
-const { usersRouters, companiesRouters } = require('./routers');
+const {
+    usersRouters,
+    companiesRouters
+} = require('./routers');
 
 // settings
-app.set('view engine', 'pug');
-app.use(express.static(__dirname + '/public'))
+// app.set('view engine', 'pug');
+// app.use(express.static(__dirname + '/public'))
 
 // database
 mongoose.set('debug', true);
@@ -26,9 +29,14 @@ mongoose
     });
 
 // middleware
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json({
+    type: '*/*'
+}));
 app.use(morgan('dev'));
-app.use(methodOverride('_method'));
+// app.use(methodOverride('_method'));
 app.use('/users', usersRouters);
 app.use('/companies', companiesRouters);
 
@@ -43,5 +51,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-   console.log(`server running at ${PORT}`); 
+    console.log(`server running at ${PORT}`);
 });

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
-// var immutablePlugin = require("mongoose-immutable");
+const bcrypt = require('bcrypt');
+
+const SALT_WORK_FACTOR = 1;
 
 const userSchema = new mongoose.Schema({
     userId: {
@@ -18,15 +20,19 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    // password: {
+    //     type: String,
+    //     required: true
+    // },
     firstName: String,
     lastName: String,
-    },
-    {
+}, {
     timestamps: true
-    },
-)
+}, )
 
-// userSchema.plugin(immutablePlugin);
+// userSchema.pre('save', function(monNext) {
+//     if (!this.isModified)
+// })
 
 userSchema.statics = {
 

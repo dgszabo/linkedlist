@@ -4,9 +4,14 @@ const {
     Company
 } = require('../models');
 const router = express.Router();
-const { Validator } = require('jsonschema');
+const {
+    Validator
+} = require('jsonschema');
 const v = new Validator();
-const { userNewSchema, userUpdateSchema } = require('../schemas');
+const {
+    userNewSchema,
+    userUpdateSchema
+} = require('../schemas');
 
 router
     .route('/')
@@ -19,14 +24,14 @@ router
     })
     .post((req, res, next) => {
         let valid = v.validate(req.body, userNewSchema);
-        if(valid.errors.length === 0) {
+        if (valid.errors.length === 0) {
             return User.createUser(new User(req.body))
                 .then(() => {
                     return res.status(201).redirect('/users');
                 })
                 .catch(err => {
                     return next(err);
-            })
+                })
         } else {
             return next(valid.errors)
         }
@@ -44,32 +49,45 @@ router
             })
             // add populate when applications and messages added later
             .then(user => {
-                if(user === null) {
+                if (user === null) {
                     return next("no_user");
                 }
-                return res.json({ user })
+                return res.json({
+                    user
+                })
             })
             .catch(err => {
                 return next(err);
             });
     })
     .patch((req, res, next) => {
-        let reqBody = {...req.body};
+        let reqBody = { ...req.body
+        };
         delete reqBody.username;
         let valid = v.validate(reqBody, userUpdateSchema);
         console.log(valid)
-        if(valid.errors.length === 0) {
-            return User.findOneAndUpdate({ username: `${req.params.username}` }, reqBody)
+        if (valid.errors.length === 0) {
+            return User.findOneAndUpdate({
+                    username: `${req.params.username}`
+                }, reqBody)
                 .then(() => {
                     return res.redirect(`/users/${req.params.username}`);
                 })
+                .catch(err => {
+                    return next(err);
+                });
         }
     })
     .delete((req, res, next) => {
-        return User.findOneAndRemove({ username: `${req.params.username}` })
+        return User.findOneAndRemove({
+                username: `${req.params.username}`
+            })
             .then(() => {
                 return res.redirect('/users');
             })
+            .catch(err => {
+                return next(err);
+            });
     })
 
 module.exports = router;
