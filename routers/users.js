@@ -9,7 +9,7 @@ const {
     readUser,
     updateUser,
     deleteUser
-} = userHandler
+} = userHandler;
 const router = express.Router();
 router
     .route('/')
