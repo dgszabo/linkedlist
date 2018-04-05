@@ -25,6 +25,27 @@ const userSchema = new mongoose.Schema({
     },
     firstName: String,
     lastName: String,
+    currentCompanyName: String,
+    currentCompanyId: String,
+    photo: String,
+	experience: [{
+        _id: false,
+		jobTitle: String,
+		companyName: String,
+		companyId: String,
+		startDate: String,
+		endDate: String,
+	}],
+	education: [ {
+        _id: false,
+        institution: String,
+		degree: String,
+	    endDate: String,
+	}],
+	skills: {
+        type: Array,
+        default: [],
+    }
 }, {
     timestamps: true
 }, )

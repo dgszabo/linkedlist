@@ -53,7 +53,7 @@ app.get('/', (req, res, next) => {
     return res.redirect('/users');
 });
 
-app.post('/userAuth', authHandler);
+app.post('/user-auth', authHandler);
 
 // error handler
 app.use((err, req, res, next) => {

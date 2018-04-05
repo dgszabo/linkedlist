@@ -49,6 +49,7 @@ function readUser(req, res, next) {
       if (user === null) {
         throw new APIError(500, 'Server broken!', 'Bad things happened');
       }
+      console.log("experience =", user.experience);
       return res.json({
         user
       })
@@ -76,6 +77,7 @@ function updateUser(req, res, next) {
       message: valid.errors.map(e => e.message).join(', ')
     })
   }
+  console.log(reqBody)
   return User.findOneAndUpdate({
       username: `${req.params.username}`
     }, reqBody)

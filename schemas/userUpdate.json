@@ -39,6 +39,100 @@
       "minLength": 1,
       "maxLength": 55
     },
+    "currentCompanyName": {
+      "$id": "/properties/currentCompanyName",
+      "type": "string",
+      "title": "The Currentcompanyname Schema "
+    },
+    "currentCompanyId": {
+      "$id": "/properties/currentCompanyId",
+      "type": [
+        "string",
+        "null"
+      ],
+      "title": "The Currentcompanyid Schema "
+    },
+    "photo": {
+      "$id": "/properties/photo",
+      "type": "string",
+      "title": "The Photo Schema "
+    },
+    "experience": {
+      "$id": "/properties/experience",
+      "type": "array",
+      "items": {
+        "$id": "/properties/experience/items",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "jobTitle": {
+            "$id": "/properties/experience/items/properties/jobTitle",
+            "type": "string",
+            "title": "The Jobtitle Schema "
+          },
+          "companyName": {
+            "$id": "/properties/experience/items/properties/companyName",
+            "type": "string",
+            "title": "The Companyname Schema "
+          },
+          "companyId": {
+            "$id": "/properties/experience/items/properties/companyId",
+            "type": [
+              "string",
+              "null"
+            ],
+            "title": "The Companyid Schema "
+          },
+          "startDate": {
+            "$id": "/properties/experience/items/properties/startDate",
+            "type": "string",
+            "title": "The Startdate Schema "
+          },
+          "endDate": {
+            "$id": "/properties/experience/items/properties/endDate",
+            "type": "string",
+            "title": "The Enddate Schema "
+          }
+        },
+        "required": ["jobTitle"]
+      }
+    },
+    "education": {
+      "$id": "/properties/education",
+      "type": "array",
+      "items": {
+        "$id": "/properties/education/items",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "institution": {
+            "$id": "/properties/education/items/properties/institution",
+            "type": "string",
+            "title": "The Institution Schema "
+          },
+          "degree": {
+            "$id": "/properties/education/items/properties/degree",
+            "type": "string",
+            "title": "The Degree Schema "
+          },
+          "endDate": {
+            "$id": "/properties/education/items/properties/endDate",
+            "type": "string",
+            "title": "The Enddate Schema "
+          }
+        },
+        "required": ["institution"]
+      }
+    },
+    "skills": {
+      "$id": "/properties/skills",
+      "type": "array",
+      "items": {
+        "$id": "/properties/skills/items",
+        "type": "string",
+        "title": "The 0th Schema "
+      }
+    },
     "createdAt": {
       "$id": "/properties/createdAt",
       "type": "string",
