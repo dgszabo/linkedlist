@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 const SALT_WORK_FACTOR = 1;
 
@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        // immutable: true,
     },
     emailAddress: {
         type: String,
@@ -30,7 +29,9 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 }, )
 
+
 userSchema.pre('save', function (monNext) {
+
     if (!this.isModified('password')) {
         return monNext();
     }
@@ -43,6 +44,25 @@ userSchema.pre('save', function (monNext) {
         })
         .catch(err => next(err));
 })
+
+userSchema.pre('findOneAndUpdate', function (monNext) {
+    const password = this.getUpdate().password;
+    if (!password) {
+        return monNext();
+    }
+    try {
+        const salt = bcrypt.genSaltSync();
+        const hash = bcrypt.hashSync(password, salt);
+        this.getUpdate().password = hash;
+        return monNext();
+    } catch (error) {
+        return next(error);
+    }
+});
+
+
+// userSchema.method
+
 userSchema.statics = {
     createUser(newUser) {
         newUser.userId = uuid4();

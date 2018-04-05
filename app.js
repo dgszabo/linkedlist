@@ -5,6 +5,10 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
+const {
+    APIError
+} = require('./helpers');
+
 // globals
 const app = express();
 const PORT = 3007;

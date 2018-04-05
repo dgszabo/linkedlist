@@ -68,17 +68,20 @@ router
         delete reqBody.username;
         let valid = v.validate(reqBody, userUpdateSchema);
         console.log(valid)
-        if (valid.errors.length === 0) {
-            return User.findOneAndUpdate({
-                    username: `${req.params.username}`
-                }, reqBody)
-                .then(() => {
-                    return res.redirect(`/users/${req.params.username}`);
-                })
-                .catch(err => {
-                    return next(err);
-                });
+        if (valid.errors.length) {
+            return next({
+                message: valid.errors.map(e => e.message).join(', ')
+            })
         }
+        return User.findOneAndUpdate({
+                username: `${req.params.username}`
+            }, reqBody)
+            .then(() => {
+                return res.redirect(`/users/${req.params.username}`);
+            })
+            .catch(err => {
+                return next(err);
+            });
     })
     .delete((req, res, next) => {
         return User.findOneAndRemove({
