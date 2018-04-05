@@ -2,17 +2,15 @@
 const jwt = require('jsonwebtoken');
 
 // app imports
-const {
-  APIError
-} = require('../helpers');
+const { APIError } = require('../helpers');
 
 function ensureCorrectUser(authHeader, correctUser) {
   let username;
-  const token = authHeader.split(' ')[1];
+  let token = authHeader.split(' ')[1];
+  console.log(authHeader)
+  console.log(token)
   try {
-    username = jwt.decode(token, {
-      json: true
-    }).username;
+    username = jwt.decode(token, { json: true }).username;
   } catch (e) {
     return e;
   }

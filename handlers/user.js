@@ -13,7 +13,8 @@ const {
   userUpdateSchema
 } = require('../schemas');
 const {
-  APIError
+  APIError,
+  ensureCorrectUser,
 } = require("../helpers");
 
 function readUsers(req, res, next) {
@@ -58,11 +59,18 @@ function readUser(req, res, next) {
 }
 
 function updateUser(req, res, next) {
+  let username = req.params.username;
+  let correctUser = ensureCorrectUser(
+    req.headers.authorization,
+    username
+  );
+  if(correctUser !== 'OK') {
+    return next(correctUser);
+  }
   let reqBody = { ...req.body
   };
   delete reqBody.username;
   let valid = v.validate(reqBody, userUpdateSchema);
-  console.log(valid)
   if (valid.errors.length) {
     return next({
       message: valid.errors.map(e => e.message).join(', ')
@@ -80,6 +88,15 @@ function updateUser(req, res, next) {
 }
 
 function deleteUser(req, res, next) {
+  let username = req.params.username;
+  console.log('THIS IS RUNNING')
+  let correctUser = ensureCorrectUser(
+    req.headers.authorization,
+    username
+  );
+  if(correctUser !== 'OK') {
+    return next(correctUser);
+  }
   return User.findOneAndRemove({
       username: `${req.params.username}`
     })

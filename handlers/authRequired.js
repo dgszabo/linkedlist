@@ -12,10 +12,8 @@ const JWT_SECRET_KEY = 'abc';
 
 function authRequired(request, response, next) {
   try {
-    console.log("header before split");
-    console.log(request.headers.authorization)
     const token = request.headers.authorization.split(' ')[1];
-    jwt.verify(token, JWT_SECRET_KEY);
+    let decoded =jwt.verify(token, JWT_SECRET_KEY);
     return next();
   } catch (e) {
     return next(
