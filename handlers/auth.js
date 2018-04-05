@@ -1,4 +1,5 @@
 // npm packages
+const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const {
   Validator
@@ -14,24 +15,27 @@ const {
 } = require("../helpers");
 
 const {
-  authSchema
+  userAuthSchema
 } = require("../schemas");
 
 // global constants
 const v = new Validator();
 
-function auth(request, response, next) {
-  const validSchema = validateSchema(
-    v.validate(request.body, authSchema),
-    "user"
-  );
-  if (validSchema !== "OK") {
-    return next(validSchema);
+function auth(req, res, next) {
+
+  let valid = v.validate(req.body, userAuthSchema);
+
+  if (valid.errors.length) {
+    return next({
+      message: valid.errors.map(e => e.message).join(', ')
+    })
   }
-  return User.readUser(request.body.data.username)
+  return User.findOne({
+      username: req.body.username
+    })
     .then(user => {
       const isValid = bcrypt.compareSync(
-        request.body.data.password,
+        req.body.password,
         user.password
       );
       if (!isValid) {
@@ -42,7 +46,7 @@ function auth(request, response, next) {
           username: user.username
         }, JWT_SECRET_KEY)
       };
-      return response.json(formatResponse(newToken));
+      return res.json(newToken);
     })
     .catch(err => {
       next(err);

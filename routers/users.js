@@ -1,7 +1,9 @@
 const express = require('express');
 
+
 const {
-    userHandler
+    userHandler,
+    authRequired
 } = require('../handlers');
 const {
     readUsers,
@@ -18,8 +20,8 @@ router
 
 router
     .route('/:username')
-    .get(readUser)
-    .patch(updateUser)
-    .delete(deleteUser);
+    .get(authRequired, readUser)
+    .patch(authRequired, updateUser)
+    .delete(authRequired, deleteUser);
 
 module.exports = router;
