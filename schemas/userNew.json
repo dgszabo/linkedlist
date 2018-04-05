@@ -32,6 +32,13 @@
       "minLength": 1,
       "maxLength": 55
     },
+    "password": {
+      "$id": "/properties/password",
+      "type": "string",
+      "title": "The Password Schema ",
+      "minLength": 1,
+      "maxLength": 55
+    },
     "userId": {
       "$id": "/properties/userId",
       "type": "string",
@@ -52,6 +59,7 @@
   },
   "required": [
     "username",
-    "emailAddress"
+    "emailAddress",
+    "password"
   ]
 }

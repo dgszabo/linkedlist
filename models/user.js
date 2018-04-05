@@ -20,22 +20,30 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    // password: {
-    //     type: String,
-    //     required: true
-    // },
+    password: {
+        type: String,
+        required: true
+    },
     firstName: String,
     lastName: String,
 }, {
     timestamps: true
 }, )
 
-// userSchema.pre('save', function(monNext) {
-//     if (!this.isModified)
-// })
-
+userSchema.pre('save', function (monNext) {
+    if (!this.isModified('password')) {
+        return monNext();
+    }
+    return bcrypt
+        .hash(this.password, SALT_WORK_FACTOR)
+        .then(hash => {
+            console.log("This is the password: " + hash)
+            this.password = hash;
+            return monNext();
+        })
+        .catch(err => next(err));
+})
 userSchema.statics = {
-
     createUser(newUser) {
         newUser.userId = uuid4();
         return newUser
