@@ -45,7 +45,7 @@ router
             // add populate when applications and messages added later
             .then(user => {
                 if(user === null) {
-                    return next("no_user");
+                    throw new APIError(500, 'Server broken!', 'Bad things happened');
                 }
                 return res.json({ user })
             })

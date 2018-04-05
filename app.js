@@ -39,7 +39,10 @@ app.get('/', (req, res, next) => {
 
 // error handler
 app.use((err, req, res, next) => {
-    return res.json(err);
+    if (!(err instanceof APIError)) {
+        err = new APIError(500, 'Internal Server Error', err.message);
+    }
+    return res.status(err.status).json(err);
 });
 
 app.listen(PORT, () => {
