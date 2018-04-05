@@ -1,0 +1,25 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "username": {
+            "$id": "/properties/username",
+            "type": "string",
+            "title": "The Username Schema ",
+            "minLength": 1,
+            "maxLength": 55
+        },
+        "password": {
+            "$id": "/properties/password",
+            "type": "string",
+            "title": "The Password Schema ",
+            "minLength": 1,
+            "maxLength": 55
+        }
+    },
+    "required": [
+        "username",
+        "password"
+    ]
+}

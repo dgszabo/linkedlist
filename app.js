@@ -9,6 +9,10 @@ const {
     APIError
 } = require('./helpers');
 
+const {
+    authHandler
+} = require('./handlers');
+
 // globals
 const app = express();
 const PORT = 3007;
@@ -48,6 +52,8 @@ app.use('/companies', companiesRouters);
 app.get('/', (req, res, next) => {
     return res.redirect('/users');
 });
+
+app.post('/userAuth', authHandler);
 
 // error handler
 app.use((err, req, res, next) => {
