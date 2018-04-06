@@ -10,12 +10,15 @@ const {
 // const { JWT_SECRET_KEY } = require('../config');
 const JWT_SECRET_KEY = 'abc';
 
-function authRequired(request, response, next) {
+function companyAuthRequired(request, response, next) {
   try {
     const token = request.headers.authorization.split(' ')[1];
     jwt.verify(token, JWT_SECRET_KEY);
-    console.log(jwt.decode(token, JWT_SECRET_KEY));
-    return next();
+    if(jwt.decode(token, JWT_SECRET_KEY).companyId) {
+      return next();
+    } else {
+      return next(new APIError(401, 'Unauthorized', 'Missing or invalid auth token.'));
+    };
   } catch (e) {
     return next(
       new APIError(401, 'Unauthorized', 'Missing or invalid auth token.')
@@ -23,4 +26,4 @@ function authRequired(request, response, next) {
   }
 }
 
-module.exports = authRequired;
+module.exports = companyAuthRequired;

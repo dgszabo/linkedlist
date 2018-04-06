@@ -19,7 +19,8 @@ const app = express();
 const PORT = 3007;
 const {
     usersRouters,
-    companiesRouters
+    companiesRouters,
+    jobsRouters,
 } = require('./routers');
 
 // settings
@@ -48,6 +49,7 @@ app.use(morgan('dev'));
 // app.use(methodOverride('_method'));
 app.use('/users', usersRouters);
 app.use('/companies', companiesRouters);
+app.use('/jobs', jobsRouters);
 
 // general routes
 app.get('/', (req, res, next) => {
