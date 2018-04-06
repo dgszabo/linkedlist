@@ -1,3 +1,4 @@
 exports.APIError = require('./APIError');
 exports.ensureCorrectUser = require('./ensureCorrectUser');
-exports.ensureCorrectCompany = require('./ensureCorrectCompany');
+exports.ensureCorrectCompanyByHandle = require('./ensureCorrectCompanyByHandle');
+exports.ensureCorrectCompanyById = require('./ensureCorrectCompanyById');

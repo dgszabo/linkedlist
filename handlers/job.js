@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const {
   Job
 } = require('../models');
@@ -12,7 +13,7 @@ const {
 } = require('../schemas');
 const {
   APIError,
-  ensureCorrectCompany,
+  ensureCorrectCompanyById,
 } = require("../helpers");
 
 function readJobs(req, res, next) {
@@ -24,6 +25,9 @@ function readJobs(req, res, next) {
 }
 
 function createJob(req, res, next) {
+  let token = req.headers.authorization.split(' ')[1];
+  let companyId = jwt.decode(token, { json: true }).companyId;
+  req.body.company = companyId;
   let valid = v.validate(req.body, jobSchema);
   if (valid.errors.length === 0) {
     return Job.createJob(new Job(req.body))
@@ -31,10 +35,14 @@ function createJob(req, res, next) {
         return res.status(201).redirect('/jobs');
       })
       .catch(err => {
-        return next(err);
+        return next(
+          new APIError(501, 'Not implemented', err)
+        );
       })
   } else {
-    return next(valid.errors)
+    return next(
+      new APIError(400, 'Bad request', 'Required field(s) not correctly completed or additional fields added.')
+    );
   }
 }
 
@@ -52,15 +60,18 @@ function readJob(req, res, next) {
       })
     })
     .catch(err => {
-      return next(err);
+      return next(
+        new APIError(400, 'Bad request', err)
+      );
     });
 }
 
 function updateJob(req, res, next) {
-  let jobId = req.params.jobId;
-  let correctCompany = ensureCorrectCompany(
+  let companyId = req.body.company;
+  let correctCompany;
+  correctCompany = ensureCorrectCompanyById(
     req.headers.authorization,
-    jobId
+    companyId
   );
   if (correctCompany !== 'OK') {
     return next(correctCompany);

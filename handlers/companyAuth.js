@@ -43,7 +43,8 @@ function companyAuth(req, res, next) {
       }
       const newToken = {
         token: jwt.sign({
-          handle: company.handle
+          handle: company.handle,
+          companyId: company.companyId,
         }, JWT_SECRET_KEY)
       };
       return res.json(newToken);

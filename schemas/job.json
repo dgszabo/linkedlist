@@ -1,6 +1,7 @@
 {
     "$id": "http://example.com/example.json",
     "type": "object",
+    "additionalProperties": false,
     "properties": {
         "title": {
             "$id": "/properties/title",
@@ -21,9 +22,20 @@
             "$id": "/properties/equity",
             "type": "number",
             "title": "The Equity Schema "
-        }
+        },
+        "createdAt": {
+            "$id": "/properties/createdAt",
+            "type": "string",
+            "title": "The Createdat Schema "
+          },
+          "updatedAt": {
+            "$id": "/properties/updatedAt",
+            "type": "string",
+            "title": "The Updatedat Schema "
+          }
     },
     "required": [
-        "title"
+        "title",
+        "company"
     ]
 }
