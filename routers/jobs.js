@@ -22,7 +22,7 @@ router
 router
   .route('/:jobId')
   .get(authRequired, readJob)
-  .patch(authRequired, updateJob)
-  .delete(authRequired, deleteJob);
+  .patch(companyAuthRequired, updateJob)
+  .delete(companyAuthRequired, deleteJob);
 
 module.exports = router;

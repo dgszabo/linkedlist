@@ -79,8 +79,6 @@ function updateJob(req, res, next) {
   let reqBody = { ...req.body
   };
   delete reqBody.jobId;
-  delete reqBody.createdAt;
-  delete reqBody.updatedAt;
   let valid = v.validate(reqBody, jobSchema);
   if (valid.errors.length) {
     return next({
@@ -89,7 +87,7 @@ function updateJob(req, res, next) {
   }
   return Job.findOneAndUpdate({
       jobId: `${req.params.jobId}`
-    }, req.body)
+    }, reqBody)
     .then(() => {
       return res.redirect(`/jobs/${req.params.jobId}`);
     })

@@ -22,7 +22,17 @@
             "$id": "/properties/equity",
             "type": "number",
             "title": "The Equity Schema "
-        }
+        },
+        "createdAt": {
+            "$id": "/properties/createdAt",
+            "type": "string",
+            "title": "The Createdat Schema "
+          },
+          "updatedAt": {
+            "$id": "/properties/updatedAt",
+            "type": "string",
+            "title": "The Updatedat Schema "
+          }
     },
     "required": [
         "title",
