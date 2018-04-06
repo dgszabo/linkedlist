@@ -92,15 +92,18 @@ function updateJob(req, res, next) {
       return res.redirect(`/jobs/${req.params.jobId}`);
     })
     .catch(err => {
-      return next(err);
+      return next(
+        new APIError(400, 'Bad request', err)
+      );
     });
 }
 
 function deleteJob(req, res, next) {
-  let jobId = req.params.jobId;
-  let correctCompany = ensureCorrectCompany(
+  let companyId = req.body.company;
+  let correctCompany;
+  correctCompany = ensureCorrectCompanyById(
     req.headers.authorization,
-    jobId
+    companyId
   );
   if (correctCompany !== 'OK') {
     return next(correctCompany);
@@ -112,7 +115,9 @@ function deleteJob(req, res, next) {
       return res.redirect('/jobs');
     })
     .catch(err => {
-      return next(err);
+      return next(
+        new APIError(400, 'Bad request', err)
+      );
     });
 }
 
