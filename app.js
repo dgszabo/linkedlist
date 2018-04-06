@@ -10,7 +10,8 @@ const {
 } = require('./helpers');
 
 const {
-    authHandler
+    authHandler,
+    companyAuthHandler
 } = require('./handlers');
 
 // globals
@@ -54,6 +55,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/user-auth', authHandler);
+app.post('/company-auth', companyAuthHandler);
 
 // error handler
 app.use((err, req, res, next) => {

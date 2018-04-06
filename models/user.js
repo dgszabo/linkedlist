@@ -28,21 +28,21 @@ const userSchema = new mongoose.Schema({
     currentCompanyName: String,
     currentCompanyId: String,
     photo: String,
-	experience: [{
+    experience: [{
         _id: false,
-		jobTitle: String,
-		companyName: String,
-		companyId: String,
-		startDate: String,
-		endDate: String,
-	}],
-	education: [ {
+        jobTitle: String,
+        companyName: String,
+        companyId: String,
+        startDate: String,
+        endDate: String,
+    }],
+    education: [{
         _id: false,
         institution: String,
-		degree: String,
-	    endDate: String,
-	}],
-	skills: {
+        degree: String,
+        endDate: String,
+    }],
+    skills: {
         type: Array,
         default: [],
     }
@@ -59,7 +59,6 @@ userSchema.pre('save', function (monNext) {
     return bcrypt
         .hash(this.password, SALT_WORK_FACTOR)
         .then(hash => {
-            console.log("This is the password: " + hash)
             this.password = hash;
             return monNext();
         })

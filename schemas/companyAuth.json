@@ -1,0 +1,26 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "emailAddress": {
+            "$id": "/properties/emailAddress",
+            "type": "string",
+            "title": "The Emailaddress Schema ",
+            "minLength": 1,
+            "maxLength": 55,
+            "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+        },
+        "password": {
+            "$id": "/properties/password",
+            "type": "string",
+            "title": "The Password Schema ",
+            "minLength": 1,
+            "maxLength": 55
+        }
+    },
+    "required": [
+        "emailAddress",
+        "password"
+    ]
+}

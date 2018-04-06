@@ -49,7 +49,6 @@ function readUser(req, res, next) {
       if (user === null) {
         throw new APIError(500, 'Server broken!', 'Bad things happened');
       }
-      console.log("experience =", user.experience);
       return res.json({
         user
       })
@@ -65,7 +64,7 @@ function updateUser(req, res, next) {
     req.headers.authorization,
     username
   );
-  if(correctUser !== 'OK') {
+  if (correctUser !== 'OK') {
     return next(correctUser);
   }
   let reqBody = { ...req.body
@@ -77,7 +76,6 @@ function updateUser(req, res, next) {
       message: valid.errors.map(e => e.message).join(', ')
     })
   }
-  console.log(reqBody)
   return User.findOneAndUpdate({
       username: `${req.params.username}`
     }, reqBody)
@@ -91,12 +89,11 @@ function updateUser(req, res, next) {
 
 function deleteUser(req, res, next) {
   let username = req.params.username;
-  console.log('THIS IS RUNNING')
   let correctUser = ensureCorrectUser(
     req.headers.authorization,
     username
   );
-  if(correctUser !== 'OK') {
+  if (correctUser !== 'OK') {
     return next(correctUser);
   }
   return User.findOneAndRemove({

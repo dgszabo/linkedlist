@@ -1,0 +1,56 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+        "email": {
+            "$id": "/properties/email",
+            "type": "string",
+            "title": "The Email Schema ",
+            "minLength": 1,
+            "maxLength": 55,
+            "pattern": "^([a-zA-Z0-9_\\\\-\\\\.]+)@([a-zA-Z0-9_\\\\-\\\\.]+)\\\\.([a-zA-Z]{2,5})$"
+        },
+        "handle": {
+            "$id": "/properties/handle",
+            "type": "string",
+            "title": "The Handle Schema ",
+            "minLength": 1,
+            "maxLength": 55
+        },
+        "password": {
+            "$id": "/properties/password",
+            "type": "string",
+            "title": "The Password Schema ",
+            "minLength": 1,
+            "maxLength": 55
+        },
+        "logo": {
+            "$id": "/properties/logo",
+            "type": "string",
+            "title": "The Logo Schema "
+        },
+        "employess": {
+            "$id": "/properties/employess",
+            "type": "array",
+            "items": {
+                "$id": "/properties/employess/items",
+                "type": "string",
+                "title": "The 0th Schema "
+            }
+        },
+        "jobs": {
+            "$id": "/properties/jobs",
+            "type": "array",
+            "items": {
+                "$id": "/properties/jobs/items",
+                "type": "string",
+                "title": "The 0th Schema "
+            }
+        }
+    },
+    "required": [
+        "email",
+        "handle",
+        "password"
+    ]
+}
