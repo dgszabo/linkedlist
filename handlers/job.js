@@ -13,7 +13,7 @@ const {
 } = require('../schemas');
 const {
   APIError,
-  ensureCorrectCompany,
+  ensureCorrectCompanyById,
 } = require("../helpers");
 
 function readJobs(req, res, next) {
@@ -67,10 +67,11 @@ function readJob(req, res, next) {
 }
 
 function updateJob(req, res, next) {
-  let companyId = req.params.company;
-  let correctCompany = ensureCorrectCompany(
+  let companyId = req.body.company;
+  let correctCompany;
+  correctCompany = ensureCorrectCompanyById(
     req.headers.authorization,
-    jobId
+    companyId
   );
   if (correctCompany !== 'OK') {
     return next(correctCompany);
@@ -78,6 +79,8 @@ function updateJob(req, res, next) {
   let reqBody = { ...req.body
   };
   delete reqBody.jobId;
+  delete reqBody.createdAt;
+  delete reqBody.updatedAt;
   let valid = v.validate(reqBody, jobSchema);
   if (valid.errors.length) {
     return next({
@@ -86,7 +89,7 @@ function updateJob(req, res, next) {
   }
   return Job.findOneAndUpdate({
       jobId: `${req.params.jobId}`
-    }, reqBody)
+    }, req.body)
     .then(() => {
       return res.redirect(`/jobs/${req.params.jobId}`);
     })

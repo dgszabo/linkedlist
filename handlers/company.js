@@ -14,7 +14,7 @@ const {
 } = require('../schemas');
 const {
   APIError,
-  ensureCorrectCompany
+  ensureCorrectCompanyByHandle
 } = require("../helpers");
 
 function readCompanies(req, res, next) {
@@ -62,7 +62,7 @@ function readCompany(req, res, next) {
 
 function updateCompany(req, res, next) {
   let handle = req.params.handle;
-  let correctCompany = ensureCorrectCompany(
+  let correctCompany = ensureCorrectCompanyByHandle(
     req.headers.authorization,
     handle
   );
@@ -92,7 +92,7 @@ function updateCompany(req, res, next) {
 
 function deleteCompany(req, res, next) {
   let handle = req.params.handle;
-  let correctCompany = ensureCorrectCompany(
+  let correctCompany = ensureCorrectCompanyByHandle(
     req.headers.authorization,
     handle
   );

@@ -6,17 +6,17 @@ const {
   APIError
 } = require('../helpers');
 
-function ensureCorrectCompany(authHeader, correctCompany) {
-  let handle;
+function ensureCorrectCompanyById(authHeader, correctCompany) {
+  let companyId;
   let token = authHeader.split(' ')[1];
   try {
-    handle = jwt.decode(token, {
+    companyId = jwt.decode(token, {
       json: true
-    }).handle;
+    }).companyId;
   } catch (e) {
     return e;
   }
-  if (handle !== correctCompany) {
+  if (companyId !== correctCompany) {
     return new APIError(
       401,
       'Unauthorized',
@@ -26,4 +26,4 @@ function ensureCorrectCompany(authHeader, correctCompany) {
   return 'OK';
 }
 
-module.exports = ensureCorrectCompany;
+module.exports = ensureCorrectCompanyById;
