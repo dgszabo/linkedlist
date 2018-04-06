@@ -24,6 +24,7 @@ function readJobs(req, res, next) {
 }
 
 function createJob(req, res, next) {
+  
   let valid = v.validate(req.body, jobSchema);
   if (valid.errors.length === 0) {
     return Job.createJob(new Job(req.body))

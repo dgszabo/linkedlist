@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 1;
 
 const companySchema = new mongoose.Schema({
-    comapnyId: {
+    companyId: {
         type: String,
         index: true
     },

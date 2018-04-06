@@ -14,7 +14,6 @@ const {
 } = require('../schemas');
 const {
   APIError,
-  // ensureCorrectUser,
   ensureCorrectCompany
 } = require("../helpers");
 
@@ -31,15 +30,14 @@ function createCompany(req, res, next) {
   if (valid.errors.length === 0) {
     return Company.createCompany(new Company(req.body))
       .then(() => {
-        console.log("IN THEN");
         return res.status(201).redirect('/companies');
       })
       .catch(err => {
-        console.log("CATCH");
+        console.log("IN CATCH")
+        console.log(req.body)
         return next(err);
       })
   } else {
-    console.log("ERROR")
     return next(valid.errors)
   }
 }

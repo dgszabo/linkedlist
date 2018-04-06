@@ -13,7 +13,8 @@ const JWT_SECRET_KEY = 'abc';
 function authRequired(request, response, next) {
   try {
     const token = request.headers.authorization.split(' ')[1];
-    let decoded = jwt.verify(token, JWT_SECRET_KEY);
+    jwt.verify(token, JWT_SECRET_KEY);
+    console.log(jwt.decode(token, JWT_SECRET_KEY));
     return next();
   } catch (e) {
     return next(

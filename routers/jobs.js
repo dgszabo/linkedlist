@@ -3,7 +3,8 @@ const express = require('express');
 
 const {
   jobHandler,
-  authRequired
+  authRequired,
+  companyAuthRequired,
 } = require('../handlers');
 const {
   readJobs,
@@ -16,7 +17,7 @@ const router = express.Router();
 router
   .route('/')
   .get(readJobs)
-  .post(authRequired, createJob);
+  .post(companyAuthRequired, createJob);
 
 router
   .route('/:jobId')
