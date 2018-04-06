@@ -3,13 +3,12 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
-        "emailAddress": {
-            "$id": "/properties/emailAddress",
+        "handle": {
+            "$id": "/properties/handle",
             "type": "string",
-            "title": "The Emailaddress Schema ",
+            "title": "The handle Schema ",
             "minLength": 1,
-            "maxLength": 55,
-            "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+            "maxLength": 55
         },
         "password": {
             "$id": "/properties/password",
@@ -20,7 +19,7 @@
         }
     },
     "required": [
-        "emailAddress",
+        "handle",
         "password"
     ]
 }

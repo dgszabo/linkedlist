@@ -15,7 +15,7 @@
             "title": "The Email Schema ",
             "minLength": 1,
             "maxLength": 55,
-            "pattern": "^([a-zA-Z0-9_\\\\-\\\\.]+)@([a-zA-Z0-9_\\\\-\\\\.]+)\\\\.([a-zA-Z]{2,5})$"
+            "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
         },
         "handle": {
             "$id": "/properties/handle",

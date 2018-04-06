@@ -5,17 +5,16 @@ const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = 1;
 
 const companySchema = new mongoose.Schema({
-    // _id: false,
     comapnyId: {
         type: String,
         index: true
     },
-    companyName: {
+    name: {
         type: String,
         required: true,
         unique: true,
     },
-    emailAddress: {
+    email: {
         type: String,
         required: true,
         unique: true,

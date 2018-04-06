@@ -1,7 +1,6 @@
 const express = require('express');
 const {
-  User,
-  Company
+  Job
 } = require('../models');
 const router = express.Router();
 const {
@@ -9,52 +8,47 @@ const {
 } = require('jsonschema');
 const v = new Validator();
 const {
-  companyNewSchema,
-  companyUpdateSchema
+  jobSchema
 } = require('../schemas');
 const {
   APIError,
-  // ensureCorrectUser,
-  ensureCorrectCompany
+  ensureCorrectCompany,
 } = require("../helpers");
 
-function readCompanies(req, res, next) {
-  return Company.find().then(companies => {
+function readJobs(req, res, next) {
+  return Job.find().then(jobs => {
     return res.json({
-      companies
+      jobs
     });
   });
 }
 
-function createCompany(req, res, next) {
-  let valid = v.validate(req.body, companyNewSchema);
+function createJob(req, res, next) {
+  let valid = v.validate(req.body, jobSchema);
   if (valid.errors.length === 0) {
-    return Company.createCompany(new Company(req.body))
+    return Job.createJob(new Job(req.body))
       .then(() => {
-        console.log("IN THEN");
-        return res.status(201).redirect('/companies');
+        return res.status(201).redirect('/jobs');
       })
       .catch(err => {
-        console.log("CATCH");
         return next(err);
       })
   } else {
-    console.log("ERROR")
     return next(valid.errors)
   }
 }
 
-function readCompany(req, res, next) {
-  return Company.findOne({
-      handle: `${req.params.handle}`,
+function readJob(req, res, next) {
+  return Job.findOne({
+      jobId: `${req.params.jobId}`,
     })
     // add populate when applications and messages added later
-    .then(company => {
-      if (company === null) {
+    .then(job => {
+      if (job === null) {
         throw new APIError(500, 'Server broken!', 'Bad things happened');
       }
       return res.json({
-        company
+        job
       })
     })
     .catch(err => {
@@ -62,50 +56,49 @@ function readCompany(req, res, next) {
     });
 }
 
-function updateCompany(req, res, next) {
-  let handle = req.params.handle;
+function updateJob(req, res, next) {
+  let jobId = req.params.jobId;
   let correctCompany = ensureCorrectCompany(
     req.headers.authorization,
-    handle
+    jobId
   );
   if (correctCompany !== 'OK') {
     return next(correctCompany);
   }
   let reqBody = { ...req.body
   };
-  delete reqBody.handle;
-  let valid = v.validate(reqBody, companyUpdateSchema);
+  delete reqBody.jobId;
+  let valid = v.validate(reqBody, jobSchema);
   if (valid.errors.length) {
     return next({
       message: valid.errors.map(e => e.message).join(', ')
     })
   }
-  console.log("VALID")
-  return Company.findOneAndUpdate({
-      handle: `${req.params.handle}`
+  return Job.findOneAndUpdate({
+      jobId: `${req.params.jobId}`
     }, reqBody)
     .then(() => {
-      return res.redirect(`/companies/${req.params.handle}`);
+      return res.redirect(`/jobs/${req.params.jobId}`);
     })
     .catch(err => {
       return next(err);
     });
 }
 
-function deleteCompany(req, res, next) {
-  let handle = req.params.handle;
+function deleteJob(req, res, next) {
+  let jobId = req.params.jobId;
   let correctCompany = ensureCorrectCompany(
     req.headers.authorization,
-    handle
+    jobId
   );
   if (correctCompany !== 'OK') {
     return next(correctCompany);
   }
-  return Company.findOneAndRemove({
-      handle: `${req.params.handle}`
+  return Job.findOneAndRemove({
+      jobId: `${req.params.jobId}`
     })
     .then(() => {
-      return res.redirect('/companies');
+      return res.redirect('/jobs');
     })
     .catch(err => {
       return next(err);
@@ -113,9 +106,9 @@ function deleteCompany(req, res, next) {
 }
 
 module.exports = {
-  readCompanies,
-  createCompany,
-  readCompany,
-  updateCompany,
-  deleteCompany
+  readJobs,
+  createJob,
+  readJob,
+  updateJob,
+  deleteJob
 };

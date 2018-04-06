@@ -1,0 +1,29 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "properties": {
+        "title": {
+            "$id": "/properties/title",
+            "type": "string",
+            "title": "The Title Schema "
+        },
+        "company": {
+            "$id": "/properties/company",
+            "type": "string",
+            "title": "The Company Schema "
+        },
+        "salary": {
+            "$id": "/properties/salary",
+            "type": "integer",
+            "title": "The Salary Schema "
+        },
+        "equity": {
+            "$id": "/properties/equity",
+            "type": "number",
+            "title": "The Equity Schema "
+        }
+    },
+    "required": [
+        "title"
+    ]
+}
