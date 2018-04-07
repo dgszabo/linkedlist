@@ -86,27 +86,30 @@ userSchema.pre('findOneAndUpdate', function (monNext) {
 // post hook for getting company ID (if company in DB) and saving employee to company.employees
 userSchema.pre('findOneAndUpdate', function (monNext) {
     if(this.getUpdate().currentCompanyName) {
-        let currentCompanyName = this.getUpdate().currentCompanyName;
-        return Company.findOne({ name: `${currentCompanyName}`})
-            .then(company => {
-                this.getUpdate().currentCompanyId = company.companyId;
-                
+        return User.findOne({username: this._conditions.username}).then(user => {
+            return Company.findOneAndUpdate({ companyId: user.currentCompanyId }, { $pull: { employees: user.username } }).then(x => {
+                let username = this._conditions["username"];
+                    let currentCompanyName = this.getUpdate().currentCompanyName;
+
+                    return Company.findOneAndUpdate({
+                            name: `${currentCompanyName}`
+                        }, {
+                            $addToSet: {
+                                employees: username
+                            }
+                        })
+                    .then(company => {
+                    return Company.findOne({ name: `${currentCompanyName}`})
+                        .then(company => {
+                            this.getUpdate().currentCompanyId = company.companyId;
+                            
+                        })
+                        .catch(err => {
+                            this.getUpdate().currentCompanyId = null;
+                        })
+                    })
             })
-            .catch(err => {
-                this.getUpdate().currentCompanyId = null;
-            })
-    }
-    let currentCompanyName = this.getUpdate().password;
-    // if (!password) {
-    //     return monNext();
-    // }
-    try {
-        // const salt = bcrypt.genSaltSync();
-        // const hash = bcrypt.hashSync(password, salt);
-        // this.getUpdate().password = hash;
-        return monNext();
-    } catch (error) {
-        return next(error);
+        })
     }
 });
 
