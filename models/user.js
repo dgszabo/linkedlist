@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
 const bcrypt = require("bcrypt");
 
+const Company = require('./company')
+
 const SALT_WORK_FACTOR = 1;
 
 const userSchema = new mongoose.Schema({
@@ -51,6 +53,7 @@ const userSchema = new mongoose.Schema({
 }, )
 
 
+// user pre hooks for hashing or modifying the password
 userSchema.pre('save', function (monNext) {
 
     if (!this.isModified('password')) {
@@ -80,6 +83,41 @@ userSchema.pre('findOneAndUpdate', function (monNext) {
     }
 });
 
+// post hook for getting company ID (if company in DB) and saving employee to company.employees
+userSchema.pre('findOneAndUpdate', function (monNext) {
+    if(this.getUpdate().currentCompanyName) {
+        let currentCompanyName = this.getUpdate().currentCompanyName;
+        return Company.findOne({ name: `${currentCompanyName}`})
+            .then(company => {
+                this.getUpdate().currentCompanyId = company.companyId;
+                
+            })
+            .catch(err => {
+                this.getUpdate().currentCompanyId = null;
+            })
+    }
+    let currentCompanyName = this.getUpdate().password;
+    // if (!password) {
+    //     return monNext();
+    // }
+    try {
+        // const salt = bcrypt.genSaltSync();
+        // const hash = bcrypt.hashSync(password, salt);
+        // this.getUpdate().password = hash;
+        return monNext();
+    } catch (error) {
+        return next(error);
+    }
+});
+
+// storySchema.post('remove', story => {
+//   // remove from posting user's list of stories
+//   mongoose
+//     .model('User')
+//     .updateUser(story.username, { $pull: { stories: story._id } });
+//   // remove from favorites for all users who have favorited the story
+//   mongoose.model('User').removeFavoriteFromAll(story._id);
+// }); 
 
 // userSchema.method
 
