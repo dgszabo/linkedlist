@@ -44,14 +44,6 @@
       "type": "string",
       "title": "The Currentcompanyname Schema "
     },
-    "currentCompanyId": {
-      "$id": "/properties/currentCompanyId",
-      "type": [
-        "string",
-        "null"
-      ],
-      "title": "The Currentcompanyid Schema "
-    },
     "photo": {
       "$id": "/properties/photo",
       "type": "string",
@@ -74,14 +66,6 @@
             "$id": "/properties/experience/items/properties/companyName",
             "type": "string",
             "title": "The Companyname Schema "
-          },
-          "companyId": {
-            "$id": "/properties/experience/items/properties/companyId",
-            "type": [
-              "string",
-              "null"
-            ],
-            "title": "The Companyid Schema "
           },
           "startDate": {
             "$id": "/properties/experience/items/properties/startDate",

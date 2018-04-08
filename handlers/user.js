@@ -18,11 +18,14 @@ const {
 } = require("../helpers");
 
 function readUsers(req, res, next) {
-  return User.find().then(users => {
-    return res.json({
-      users
+  return User.find()
+    .populate('currentCompanyId', 'companyId')
+    .exec()
+    .then(users => {
+      return res.json({
+        users
+      });
     });
-  });
 }
 
 function createUser(req, res, next) {
@@ -44,7 +47,8 @@ function readUser(req, res, next) {
   return User.findOne({
       username: `${req.params.username}`,
     })
-    // add populate when applications and messages added later
+    .populate('currentCompanyId', 'companyId')
+    .exec()
     .then(user => {
       if (user === null) {
         throw new APIError(500, 'Server broken!', 'Bad things happened');

@@ -28,7 +28,10 @@ const userSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     currentCompanyName: String,
-    currentCompanyId: String,
+    currentCompanyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Company"
+    },
     photo: String,
     experience: [{
         _id: false,
@@ -85,31 +88,39 @@ userSchema.pre('findOneAndUpdate', function (monNext) {
 
 // post hook for getting company ID (if company in DB) and saving employee to company.employees
 userSchema.pre('findOneAndUpdate', function (monNext) {
-    if(this.getUpdate().currentCompanyName) {
-        return User.findOne({username: this._conditions.username}).then(user => {
-            return Company.findOneAndUpdate({ companyId: user.currentCompanyId }, { $pull: { employees: user.username } }).then(x => {
-                let username = this._conditions["username"];
-                    let currentCompanyName = this.getUpdate().currentCompanyName;
-
-                    return Company.findOneAndUpdate({
-                            name: `${currentCompanyName}`
-                        }, {
-                            $addToSet: {
-                                employees: username
-                            }
-                        })
-                    .then(company => {
-                    return Company.findOne({ name: `${currentCompanyName}`})
-                        .then(company => {
-                            this.getUpdate().currentCompanyId = company.companyId;
-                            
-                        })
-                        .catch(err => {
-                            this.getUpdate().currentCompanyId = null;
-                        })
-                    })
+    if (this.getUpdate().currentCompanyName) {
+        return User.findOne({
+                username: this._conditions.username
             })
-        })
+            .then(user => {
+                return Company.findOneAndUpdate({
+                    companyId: user.currentCompanyId
+                }, {
+                    $pull: {
+                        employees: user.username
+                    }
+                })
+            })
+            .then(() => {
+                let username = this._conditions["username"];
+                let currentCompanyName = this.getUpdate().currentCompanyName;
+                return Company.findOneAndUpdate({
+                    name: `${currentCompanyName}`
+                }, {
+                    $addToSet: {
+                        employees: username
+                    }
+                })
+            })
+            .then(company => {
+                return Company.getMongoId(company.companyId);
+            })
+            .then(id => {
+                return this.getUpdate().currentCompanyId = id;
+            })
+            .catch(err => {
+                this.getUpdate().currentCompanyId = null;
+            })
     }
 });
 
@@ -132,6 +143,17 @@ userSchema.statics = {
             .then(user => {
                 return user.toObject();
             })
+    },
+    getMongoId(username) {
+        return User.findOne({
+                username
+            }, {
+                _id: 1
+            })
+            .exec()
+            .then(user => {
+                return user._id;
+            })
     }
 }
 
@@ -143,6 +165,7 @@ userSchema.options.toObject.transform = (doc, ret) => {
     const transformed = ret;
     delete transformed._id;
     delete transformed.__v;
+    delete transformed.password;
     return transformed;
 };
 

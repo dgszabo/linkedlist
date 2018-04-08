@@ -50,7 +50,7 @@ function readCompany(req, res, next) {
       handle: `${req.params.handle}`,
     })
     // add populate when applications and messages added later
-    .populate("jobs")
+    .populate('jobs', 'title jobId createdAt updatedAt')
     .exec()
     .then(company => {
       if (company === null) {
@@ -83,7 +83,6 @@ function updateCompany(req, res, next) {
       message: valid.errors.map(e => e.message).join(', ')
     })
   }
-  console.log("VALID")
   return Company.findOneAndUpdate({
       handle: `${req.params.handle}`
     }, reqBody)
