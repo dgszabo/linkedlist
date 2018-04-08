@@ -132,16 +132,6 @@
         "type": "string",
         "title": "The 0th Schema "
       }
-    },
-    "createdAt": {
-      "$id": "/properties/createdAt",
-      "type": "string",
-      "title": "The Createdat Schema "
-    },
-    "updatedAt": {
-      "$id": "/properties/updatedAt",
-      "type": "string",
-      "title": "The Updatedat Schema "
     }
   },
   "required": [

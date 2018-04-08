@@ -88,10 +88,11 @@ function updateJob(req, res, next) {
     if (correctCompany !== 'OK') {
       return next(correctCompany);
     }
-    let reqBody = { ...req.body
-    };
+    let reqBody = { ...req.body };
     delete reqBody.jobId;
     delete reqBody.company;
+    delete reqBody.createdAt;
+    delete reqBody.updatedAt;
     let valid = v.validate(reqBody, jobSchema);
     if (valid.errors.length) {
       return next({

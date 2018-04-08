@@ -45,16 +45,6 @@
       "title": "The Userid Schema ",
       "minLength": 1,
       "maxLength": 55
-    },
-    "createdAt": {
-      "$id": "/properties/createdAt",
-      "type": "string",
-      "title": "The Createdat Schema "
-    },
-    "updatedAt": {
-      "$id": "/properties/updatedAt",
-      "type": "string",
-      "title": "The Updatedat Schema "
     }
   },
   "required": [
