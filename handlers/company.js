@@ -18,11 +18,14 @@ const {
 } = require("../helpers");
 
 function readCompanies(req, res, next) {
-  return Company.find().then(companies => {
-    return res.json({
-      companies
+  return Company.find()
+    .populate('jobs', 'title jobId createdAt updatedAt')
+    .exec()
+    .then(companies => {
+      return res.json({
+        companies
+      });
     });
-  });
 }
 
 function createCompany(req, res, next) {
@@ -47,6 +50,8 @@ function readCompany(req, res, next) {
       handle: `${req.params.handle}`,
     })
     // add populate when applications and messages added later
+    .populate("jobs")
+    .exec()
     .then(company => {
       if (company === null) {
         throw new APIError(500, 'Server broken!', 'Bad things happened');

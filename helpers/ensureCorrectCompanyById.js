@@ -13,6 +13,7 @@ function ensureCorrectCompanyById(authHeader, correctCompany) {
     companyId = jwt.decode(token, {
       json: true
     }).companyId;
+    console.log(companyId)
   } catch (e) {
     return e;
   }

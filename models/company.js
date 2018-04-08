@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
 const bcrypt = require("bcrypt");
 
+const { Job } = require('../models');
+
 const SALT_WORK_FACTOR = 1;
 
 const companySchema = new mongoose.Schema({
@@ -35,13 +37,13 @@ const companySchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    jobs: {
-        type: Array,
-        default: [],
-    }
-}, {
-    timestamps: true
-}, )
+    jobs:  [ {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Job"
+        } ],
+    },    
+    { timestamps: true },
+)
 
 companySchema.pre('save', function (monNext) {
 

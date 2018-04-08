@@ -1,7 +1,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const {
-  Job
+  Job,
+  User,
+  Company
 } = require('../models');
 const router = express.Router();
 const {
@@ -29,8 +31,16 @@ function createJob(req, res, next) {
   let companyId = jwt.decode(token, { json: true }).companyId;
   req.body.company = companyId;
   let valid = v.validate(req.body, jobSchema);
+  let jobId;
   if (valid.errors.length === 0) {
     return Job.createJob(new Job(req.body))
+      .then(job => {
+        jobId = job.jobId;
+        return Job.getMongoId(job.jobId);
+      })
+      .then(id => {
+        return Company.findOneAndUpdate({ companyId }, { $addToSet: { jobs: id }})
+      })
       .then(() => {
         return res.status(201).redirect('/jobs');
       })
@@ -67,29 +77,33 @@ function readJob(req, res, next) {
 }
 
 function updateJob(req, res, next) {
-  let companyId = req.body.company;
-  let correctCompany;
-  correctCompany = ensureCorrectCompanyById(
-    req.headers.authorization,
-    companyId
-  );
-  if (correctCompany !== 'OK') {
-    return next(correctCompany);
-  }
-  let reqBody = { ...req.body
-  };
-  delete reqBody.jobId;
-  let valid = v.validate(reqBody, jobSchema);
-  if (valid.errors.length) {
-    return next({
-      message: valid.errors.map(e => e.message).join(', ')
-    })
-  }
-  return Job.findOneAndUpdate({
-      jobId: `${req.params.jobId}`
-    }, reqBody)
-    .then(() => {
-      return res.redirect(`/jobs/${req.params.jobId}`);
+  return Job.findOne({ jobId: req.params.jobId})
+  .then(job => {
+    let companyId = job.company;
+    let correctCompany;
+    correctCompany = ensureCorrectCompanyById(
+      req.headers.authorization,
+      companyId
+    );
+    if (correctCompany !== 'OK') {
+      return next(correctCompany);
+    }
+    let reqBody = { ...req.body
+    };
+    delete reqBody.jobId;
+    delete reqBody.company;
+    let valid = v.validate(reqBody, jobSchema);
+    if (valid.errors.length) {
+      return next({
+        message: valid.errors.map(e => e.message).join(', ')
+      })
+    }
+    return Job.findOneAndUpdate({
+        jobId: `${req.params.jobId}`
+      }, reqBody)
+      .then(() => {
+        return res.redirect(`/jobs/${req.params.jobId}`);
+      })
     })
     .catch(err => {
       return next(
@@ -99,26 +113,34 @@ function updateJob(req, res, next) {
 }
 
 function deleteJob(req, res, next) {
-  let companyId = req.body.company;
-  let correctCompany;
-  correctCompany = ensureCorrectCompanyById(
-    req.headers.authorization,
-    companyId
-  );
-  if (correctCompany !== 'OK') {
-    return next(correctCompany);
-  }
-  return Job.findOneAndRemove({
-      jobId: `${req.params.jobId}`
-    })
-    .then(() => {
-      return res.redirect('/jobs');
-    })
-    .catch(err => {
-      return next(
-        new APIError(400, 'Bad request', err)
-      );
-    });
+  let companyId;
+  return Job.findOne({ jobId: req.params.jobId})
+  .then(job => {
+    companyId = job.company;
+    let correctCompany;
+    correctCompany = ensureCorrectCompanyById(
+      req.headers.authorization,
+      companyId
+    );
+    if (correctCompany !== 'OK') {
+      return next(correctCompany);
+    }
+    return Job.getMongoId(job.jobId);
+  })
+  .then(id => {
+    return Company.findOneAndUpdate({ companyId }, { $pull: { jobs: id }})
+  })
+  .then(job => {
+    return Job.findOneAndRemove({ jobId: `${req.params.jobId}`})
+  })
+  .then(() => {
+    return res.redirect('/jobs');
+  })
+  .catch(err => {
+    return next(
+      new APIError(400, 'Bad request', err)
+    );
+  });
 }
 
 module.exports = {

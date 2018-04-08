@@ -28,7 +28,6 @@ const jobSchema = new mongoose.Schema({
 }, )
 
 // jobSchema.method
-
 jobSchema.statics = {
   createJob(newJob) {
     newJob.jobId = uuid4();
@@ -37,10 +36,27 @@ jobSchema.statics = {
       .then(job => {
         return job.toObject();
       })
+  },
+  getMongoId(jobId) {
+    return Job.findOne({ jobId }, { _id: 1 })
+    .exec()
+    .then(job => {
+      return job._id;
+    })
   }
 }
 
 const Job = mongoose.model('Job', jobSchema, 'jobs');
+
+// Post hook
+// jobSchema.post('save', job => {
+//     return Job.findOne({ jobId: job.jobId }, { _id: 1 })
+//     .exec()
+//     .then(job => {
+//       console.log('WE REACHED INSIDE THE HOOK')
+//       console.log(job);
+//     })
+// })
 
 // This code removes _id and __v from query results
 if (!jobSchema.options.toObject) jobSchema.options.toObject = {};
