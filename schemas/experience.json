@@ -1,0 +1,31 @@
+{
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "jobTitle": {
+            "$id": "/properties/jobTitle",
+            "type": "string",
+            "title": "The Jobtitle Schema "
+        },
+        "companyName": {
+            "$id": "/properties/companyName",
+            "type": "string",
+            "title": "The Companyname Schema "
+        },
+        "startDate": {
+            "$id": "/properties/startDate",
+            "type": "string",
+            "title": "The Startdate Schema "
+        },
+        "endDate": {
+            "$id": "/properties/endDate",
+            "type": "string",
+            "title": "The Enddate Schema "
+        }
+    },
+    "required": [
+        "jobTitle",
+        "companyName"
+    ]
+}

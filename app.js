@@ -21,6 +21,7 @@ const {
     usersRouters,
     companiesRouters,
     jobsRouters,
+    experiencesRouters,
 } = require('./routers');
 
 // settings
@@ -48,6 +49,7 @@ app.use(bodyParser.json({
 app.use(morgan('dev'));
 // app.use(methodOverride('_method'));
 app.use('/users', usersRouters);
+app.use('/users/:username/experiences', experiencesRouters);
 app.use('/companies', companiesRouters);
 app.use('/jobs', jobsRouters);
 

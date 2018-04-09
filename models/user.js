@@ -86,7 +86,7 @@ userSchema.pre('findOneAndUpdate', function (monNext) {
     }
 });
 
-// post hook for getting company ID (if company in DB) and saving employee to company.employees
+// pre hook for getting company ID (if company in DB) and saving employee to company.employees
 userSchema.pre('findOneAndUpdate', function (monNext) {
     if (this.getUpdate().currentCompanyName) {
         return User.findOne({
@@ -123,6 +123,69 @@ userSchema.pre('findOneAndUpdate', function (monNext) {
             })
     }
 });
+
+// // pre hook for getting company ID (if company in DB) in expreiences
+// userSchema.pre('findOneAndUpdate', function (monNext) {
+//     console.log("UPDATE STUFF")
+//     console.log(this.getUpdate().experience)
+//     let newXP = this.getUpdate().experience;
+    
+//     function queryCompanyIds(arr) {
+//         return new Promise((resolve, reject) => {
+//         // doing a bunch of ASYNC stuff in here
+//         let newArr = [];
+//         return Promise.all(
+//             // for the results (films) of the query response ojbect
+//             arr.map(experience => {
+//                 // we're doing a bunch more async stuff on each
+//                 let XP = experience;
+//                 return Company.findOne({name: `${experience.companyName}`})
+//                 .then(company => {
+//                     console.log("THE COMPANY")
+//                     console.log(company)
+//                     return Company.getMongoId(company.companyId)
+//                     .then(id => {
+//                         XP.companyId = id;
+//                         newArr.push(XP)
+//                         return newArr;
+//                     })
+//                 })
+//                 console.log("BOUNCED OUT OF MAP")
+//             })
+//             .catch(err => {
+//                 console.log("NO COMPANY ID FOUND")
+//                 this.getUpdate().currentCompanyId = null;
+            
+//             })
+            
+//         )
+//         }).then(result => {
+//             console.log("BEFORE RESOLVE")
+//             resolve(result);
+//             console.log("AFTER RESOLVE")
+//         }); 
+//     }
+
+//     queryCompanyIds(newXP).then(x => {console.log("REACHED THE END OF THIS")})
+
+    // if (this.getUpdate().currentCompanyName) {
+    //     return User.findOne({
+    //             username: this._conditions.username
+    //     })
+    //     .then(company => {
+    //         return Company.getMongoId(company.companyId);
+    //     })
+    //     .then(id => {
+    //         return this.getUpdate().currentCompanyId = id;
+    //     })
+    //     .catch(err => {
+    //         this.getUpdate().currentCompanyId = null;
+    //     })
+    // }
+    // return User.findOne({
+    //     username: this._conditions.username
+    // });
+// });
 
 // storySchema.post('remove', story => {
 //   // remove from posting user's list of stories

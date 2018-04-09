@@ -5,3 +5,4 @@ exports.companyNewSchema = require('./companyNew')
 exports.companyUpdateSchema = require('./companyUpdate')
 exports.companyAuthSchema = require('./companyAuth');
 exports.jobSchema = require('./job');
+exports.experienceSchema = require('./experience');

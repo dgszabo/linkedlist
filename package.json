@@ -27,5 +27,8 @@
     "morgan": "^1.9.0",
     "pug": "^2.0.3",
     "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "locus": "^2.0.1"
   }
 }
