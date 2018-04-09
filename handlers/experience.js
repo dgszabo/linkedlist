@@ -17,19 +17,20 @@ const {
   ensureCorrectUser,
 } = require("../helpers");
 
-function createExperience(req, res, next) {
+async function createExperience(req, res, next) {
   let valid = v.validate(req.body, experienceSchema);
-  eval(require("locus"))
+  
   if (valid.errors.length === 0) {
-    return Experience.createExperience(new Experience(req.body))
-      .then(() => {
-        return res.status(201).redirect(`/users/${req.params.username}`);
-      })
-      .catch(err => {
-        return next(err);
-      })
-  } else {
-    return next(valid.errors)
+    try {
+      let newExperience = await Experience.createExperience(new Experience(req.body))
+      let correctId = await Experience.getMongoId(newExperience.experienceId)
+      let foundUser = await User.findOne({username: req.params.username})
+      foundUser.experience.push(correctId)
+      await foundUser.save()
+      return res.status(201).redirect(`/users/${req.params.username}`);
+    } catch(err){
+      return next(err)
+    }
   }
 }
 

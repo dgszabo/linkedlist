@@ -34,12 +34,8 @@ const userSchema = new mongoose.Schema({
     },
     photo: String,
     experience: [{
-        _id: false,
-        jobTitle: String,
-        companyName: String,
-        companyId: String,
-        startDate: String,
-        endDate: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Experience"
     }],
     education: [{
         _id: false,

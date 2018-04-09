@@ -48,6 +48,7 @@ function readUser(req, res, next) {
       username: `${req.params.username}`,
     })
     .populate('currentCompanyId', 'companyId')
+    .populate('experience', 'jobTitle companyName experienceId startDate endDate')
     .exec()
     .then(user => {
       if (user === null) {
