@@ -7,7 +7,7 @@ const experienceSchema = new mongoose.Schema({
     experienceId: {
         type: String,
         index: true
-    }, 
+    },
     username: String,
     jobTitle: {
         type: String,
@@ -23,66 +23,64 @@ const experienceSchema = new mongoose.Schema({
     },
     startDate: String,
     endDate: String,
-    },
-)
+}, )
 
 // pre hook for getting company ID (if company in DB) and saving employee to company.employees
 experienceSchema.pre('save', function (monNext) {
 
     let companyName = this.companyName;
     return Company.findOne({
-        name: `${companyName}`
-    })
-    .then(company => {
-        if(!company) {
-            return this.companyId = null;
-        }
-        return Company.getMongoId(company.companyId);
-    })
-    .then(id => {
-        return this.companyId = id;
-    })
-    .catch(err => {
-        this.companyId = null;
-    })
+            name: `${companyName}`
+        })
+        .then(company => {
+            if (!company) {
+                return this.companyId = null;
+            }
+            return Company.getMongoId(company.companyId);
+        })
+        .then(id => {
+            return this.companyId = id;
+        })
+        .catch(err => {
+            this.companyId = null;
+        })
 });
 
-// userSchema.pre('findOneAndUpdate', function (monNext) {
-//     if (this.getUpdate().currentCompanyName) {
-//         return User.findOne({
-//                 username: this._conditions.username
-//             })
-//             .then(user => {
-//                 return Company.findOneAndUpdate({
-//                     companyId: user.currentCompanyId
-//                 }, {
-//                     $pull: {
-//                         employees: user.username
-//                     }
-//                 })
-//             })
-//             .then(() => {
-//                 let username = this._conditions["username"];
-//                 let currentCompanyName = this.getUpdate().currentCompanyName;
-//                 return Company.findOneAndUpdate({
-//                     name: `${currentCompanyName}`
-//                 }, {
-//                     $addToSet: {
-//                         employees: username
-//                     }
-//                 })
-//             })
-//             .then(company => {
-//                 return Company.getMongoId(company.companyId);
-//             })
-//             .then(id => {
-//                 return this.getUpdate().currentCompanyId = id;
-//             })
-//             .catch(err => {
-//                 this.getUpdate().currentCompanyId = null;
-//             })
-//     }
+experienceSchema.pre('findOneAndUpdate', function (monNext) {
+    let companyName = this.getUpdate().companyName;
+    return Company.findOne({
+            name: `${companyName}`
+        })
+        .then(company => {
+            if (!company) {
+                return this.getUpdate().companyId = null;
+            }
+            return Company.getMongoId(company.companyId);
+        })
+        .then(id => {
+            return this.getUpdate().companyId = id;
+        })
+        .catch(err => {
+            this.companyId = null;
+        })
+});
+
+// experienceSchema.pre('findOneAndRemove', function (monNext) {
+//     // remove from posting user's list of stories
+//     // let companyName = this.getUpdate().companyName;
+//     eval(require("locus"))
+//     mongoose
+//         .model('User')
+
+//         .updateUser(experience.username, {
+//             $pull: {
+//                 stories: experience._id
+//             }
+//         });
+//     // remove from favorites for all users who have favorited the story
+//     // mongoose.model('User').removeFavoriteFromAll(experience._id);
 // });
+
 
 // experienceSchema.methods
 experienceSchema.statics = {

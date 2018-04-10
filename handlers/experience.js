@@ -79,36 +79,36 @@ async function updateExperience(req, res, next) {
   delete reqBody.username;
   try {
     req.body.username = username;
-    let newExperience = await Experience.createExperience(new Experience(req.body))
-    let correctId = await Experience.getMongoId(newExperience.experienceId)
-    let foundUser = await User.findOne({
-      username
+
+    let experience = await Experience.findOne({
+      experienceId: req.params.experienceId
     })
-    foundUser.experience.push(correctId)
-    await foundUser.save()
-    return res.status(201).redirect(`/users/${req.params.username}`);
+    if (experience.username !== username) {
+      return new APIError(401, 'Unauthorized', 'You are not authorized to update this experience!!!');
+    }
   } catch (err) {
     return next(err)
   }
-
-  let valid = v.validate(reqBody, userUpdateSchema);
+  let valid = v.validate(reqBody, experienceSchema);
   if (valid.errors.length) {
+
     return next({
       message: valid.errors.map(e => e.message).join(', ')
     })
   }
   return Experience.findOneAndUpdate({
-      username: `${req.params.username}`
+      experienceId: `${req.params.experienceId}`
     }, reqBody)
     .then(() => {
-      return res.redirect(`/users/${req.params.username}`);
+      return res.redirect(`/users/${req.params.username}/experiences/${req.params.experienceId}`);
     })
     .catch(err => {
       return next(err);
     });
 }
 
-function deleteExperience(req, res, next) {
+async function deleteExperience(req, res, next) {
+  let expId;
   let username = req.params.username;
   let correctUser = ensureCorrectUser(
     req.headers.authorization,
@@ -117,11 +117,43 @@ function deleteExperience(req, res, next) {
   if (correctUser !== 'OK') {
     return next(correctUser);
   }
-  return Experience.findOneAndRemove({
-      username: `${req.params.username}`
+  let reqBody = { ...req.body
+  };
+  try {
+    req.body.username = username;
+
+    let experience = await Experience.findOne({
+      experienceId: req.params.experienceId
+    })
+    expId = await Experience.getMongoId(experience.experienceId);
+
+    if (experience.username !== username) {
+      return new APIError(401, 'Unauthorized', 'You are not authorized to update this experience!!!');
+    }
+  } catch (err) {
+    return next(err)
+  }
+  console.log("Before return!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+  console.log("values!!!!")
+  console.log(expId);
+  console.log(username)
+  eval(require("locus"));
+  return User.findOneAndUpdate({
+      username
+    }, {
+      $pull: {
+        experience: expId
+      }
     })
     .then(() => {
-      return res.redirect('/users');
+      console.log("then!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      return Experience.findOneAndRemove({
+        experienceId: `${req.params.experienceId}`
+      })
+    })
+    .then(() => {
+      console.log("REDIRECT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      return res.redirect(`/users/${req.params.username}`);
     })
     .catch(err => {
       return next(err);
