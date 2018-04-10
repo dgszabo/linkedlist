@@ -18,17 +18,29 @@ const {
 } = require("../helpers");
 
 async function createExperience(req, res, next) {
+  let username = req.params.username;
+  let correctUser = ensureCorrectUser(
+    req.headers.authorization,
+    username
+  );
+  if (correctUser !== 'OK') {
+    return next(correctUser);
+  }
+
   let valid = v.validate(req.body, experienceSchema);
-  
+
   if (valid.errors.length === 0) {
     try {
+      req.body.username = username;
       let newExperience = await Experience.createExperience(new Experience(req.body))
       let correctId = await Experience.getMongoId(newExperience.experienceId)
-      let foundUser = await User.findOne({username: req.params.username})
+      let foundUser = await User.findOne({
+        username
+      })
       foundUser.experience.push(correctId)
       await foundUser.save()
       return res.status(201).redirect(`/users/${req.params.username}`);
-    } catch(err){
+    } catch (err) {
       return next(err)
     }
   }

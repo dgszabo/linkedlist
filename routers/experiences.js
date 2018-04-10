@@ -9,10 +9,12 @@ const {
     updateExperience,
     deleteExperience
 } = experienceHandler;
-const router = express.Router({ mergeParams: true });
+const router = express.Router({
+    mergeParams: true
+});
 router
     .route('/')
-    .post(createExperience);
+    .post(authRequired, createExperience);
 
 router
     .route('/:experienceId')
