@@ -20,6 +20,7 @@ const {
 function readUsers(req, res, next) {
   return User.find()
     .populate('currentCompanyId', 'companyId')
+    .populate('experience', 'jobTitle companyName experienceId startDate endDate')
     .exec()
     .then(users => {
       return res.json({

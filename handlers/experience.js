@@ -39,14 +39,33 @@ async function createExperience(req, res, next) {
       })
       foundUser.experience.push(correctId)
       await foundUser.save()
-      return res.status(201).redirect(`/users/${req.params.username}`);
+      return res.status(201).redirect(`/users/${req.params.username}/experiences/${newExperience.experienceId}`);
     } catch (err) {
       return next(err)
     }
   }
 }
 
-function updateExperience(req, res, next) {
+function readExperience(req, res, next) {
+  return Experience.findOne({
+      experienceId: `${req.params.experienceId}`,
+    })
+    .populate('companyId', 'companyId')
+    .exec()
+    .then(experience => {
+      if (experience === null) {
+        throw new APIError(500, 'Server broken!', 'Bad things happened');
+      }
+      return res.json({
+        experience
+      })
+    })
+    .catch(err => {
+      return next(err);
+    });
+}
+
+async function updateExperience(req, res, next) {
   let username = req.params.username;
   let correctUser = ensureCorrectUser(
     req.headers.authorization,
@@ -58,6 +77,20 @@ function updateExperience(req, res, next) {
   let reqBody = { ...req.body
   };
   delete reqBody.username;
+  try {
+    req.body.username = username;
+    let newExperience = await Experience.createExperience(new Experience(req.body))
+    let correctId = await Experience.getMongoId(newExperience.experienceId)
+    let foundUser = await User.findOne({
+      username
+    })
+    foundUser.experience.push(correctId)
+    await foundUser.save()
+    return res.status(201).redirect(`/users/${req.params.username}`);
+  } catch (err) {
+    return next(err)
+  }
+
   let valid = v.validate(reqBody, userUpdateSchema);
   if (valid.errors.length) {
     return next({
@@ -97,6 +130,7 @@ function deleteExperience(req, res, next) {
 
 module.exports = {
   createExperience,
+  readExperience,
   updateExperience,
   deleteExperience
 };

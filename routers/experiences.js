@@ -6,6 +6,7 @@ const {
 } = require('../handlers');
 const {
     createExperience,
+    readExperience,
     updateExperience,
     deleteExperience
 } = experienceHandler;
@@ -18,6 +19,7 @@ router
 
 router
     .route('/:experienceId')
+    .get(authRequired, readExperience)
     .patch(authRequired, updateExperience)
     .delete(authRequired, deleteExperience);
 
