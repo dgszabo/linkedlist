@@ -20,7 +20,7 @@ const {
 function readUsers(req, res, next) {
   return User.find()
     .populate('currentCompanyId', 'companyId')
-    .populate('experience', 'jobTitle companyName experienceId startDate endDate')
+    .populate('experience', 'jobTitle companyName username experienceId startDate endDate')
     .exec()
     .then(users => {
       return res.json({
@@ -49,7 +49,7 @@ function readUser(req, res, next) {
       username: `${req.params.username}`,
     })
     .populate('currentCompanyId', 'companyId')
-    .populate('experience', 'jobTitle companyName experienceId startDate endDate')
+    .populate('experience', 'jobTitle companyName username experienceId startDate endDate')
     .exec()
     .then(user => {
       if (user === null) {

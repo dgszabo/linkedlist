@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const uuid4 = require('uuid/v4');
 
 const Company = require('./company')
+const User = require('./user')
 
 const experienceSchema = new mongoose.Schema({
     experienceId: {
@@ -65,18 +66,13 @@ experienceSchema.pre('findOneAndUpdate', function (monNext) {
         })
 });
 
-// experienceSchema.pre('findOneAndRemove', function (monNext) {
-//     // remove from posting user's list of stories
-//     // let companyName = this.getUpdate().companyName;
-//     eval(require("locus"))
-//     mongoose
-//         .model('User')
-
-//         .updateUser(experience.username, {
-//             $pull: {
-//                 stories: experience._id
-//             }
-//         });
+// experienceSchema.post('save', async experience => {
+//     let mongoId = await Experience.getMongoId(experience.experienceId)
+//     User.findOneAndUpdate({ username: experience.username }, { $addToSet: { experience: mongoId }})
+//     .then(() => eval(require('locus')), console.log("reached here"))
+//     .catch(err => {
+//        return err;
+//     })
 //     // remove from favorites for all users who have favorited the story
 //     // mongoose.model('User').removeFavoriteFromAll(experience._id);
 // });

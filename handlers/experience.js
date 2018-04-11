@@ -109,6 +109,7 @@ async function updateExperience(req, res, next) {
 
 async function deleteExperience(req, res, next) {
   let expId;
+  let experience;
   let username = req.params.username;
   let correctUser = ensureCorrectUser(
     req.headers.authorization,
@@ -117,12 +118,8 @@ async function deleteExperience(req, res, next) {
   if (correctUser !== 'OK') {
     return next(correctUser);
   }
-  let reqBody = { ...req.body
-  };
   try {
-    req.body.username = username;
-
-    let experience = await Experience.findOne({
+    experience = await Experience.findOne({
       experienceId: req.params.experienceId
     })
     expId = await Experience.getMongoId(experience.experienceId);
@@ -133,31 +130,16 @@ async function deleteExperience(req, res, next) {
   } catch (err) {
     return next(err)
   }
-  console.log("Before return!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-  console.log("values!!!!")
-  console.log(expId);
-  console.log(username)
-  eval(require("locus"));
-  return User.findOneAndUpdate({
-      username
-    }, {
-      $pull: {
-        experience: expId
-      }
-    })
-    .then(() => {
-      console.log("then!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-      return Experience.findOneAndRemove({
-        experienceId: `${req.params.experienceId}`
-      })
-    })
-    .then(() => {
-      console.log("REDIRECT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-      return res.redirect(`/users/${req.params.username}`);
-    })
-    .catch(err => {
+  try {
+    let foundUser = await User.findOne({username})
+    foundUser.experience.remove(expId)
+    await foundUser.save()
+    await Experience.findOneAndRemove({ experienceId: `${req.params.experienceId}` })
+    return res.redirect(`/users/${req.params.username}`);
+  }
+    catch(err) {
       return next(err);
-    });
+    }
 }
 
 module.exports = {
